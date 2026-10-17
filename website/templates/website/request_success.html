@@ -1,0 +1,42 @@
+{% extends "website/base.html" %}
+
+{% block title %}درخواست ثبت شد{% endblock %}
+{% block crumb %}ثبت درخواست{% endblock %}
+{% block page_title %}درخواست شما ثبت شد{% endblock %}
+{% block page_subtitle %}کد پیگیری را نگه دارید. با همین کد وضعیت کار را می‌توانید ببینید.{% endblock %}
+
+{% block content %}
+<section class="bg-neutral-50 py-16">
+  <div class="mx-auto max-w-xl px-4">
+    <div class="rounded-[28px] bg-white p-8 text-center shadow-card">
+      <div class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-gold text-sabz">
+        <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <p class="text-sm text-neutral-500">کد پیگیری</p>
+      <p class="mt-1 text-3xl font-extrabold tracking-widest text-sabz">{{ item.tracking_code }}</p>
+      <dl class="mt-8 space-y-3 text-sm">
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">نام</dt>
+          <dd class="font-bold">{{ item.full_name }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">خدمت</dt>
+          <dd class="font-bold">{{ item.get_service_display }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">وضعیت</dt>
+          <dd class="font-bold text-sabz">{{ item.get_status_display }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <dt class="text-neutral-500">تاریخ ثبت</dt>
+          <dd class="font-bold">{{ item.created_at|date:"Y/m/d H:i" }}</dd>
+        </div>
+      </dl>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="{% url 'track' %}?code={{ item.tracking_code }}" class="rounded-xl bg-sabz px-5 py-3 text-sm font-extrabold text-white">پیگیری این درخواست</a>
+        <a href="{% url 'home' %}" class="rounded-xl bg-neutral-100 px-5 py-3 text-sm font-extrabold">بازگشت به خانه</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

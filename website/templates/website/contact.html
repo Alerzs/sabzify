@@ -1,0 +1,50 @@
+{% extends "website/base.html" %}
+
+{% block title %}تماس با ما{% endblock %}
+{% block crumb %}تماس با ما{% endblock %}
+{% block page_title %}راه‌های حرف زدن با سبزیفای{% endblock %}
+{% block page_subtitle %}تماس، ایمیل یا فرم کوتاه. اگر جزئیات کار را می‌دانید، فرم ثبت درخواست دقیق‌تر است.{% endblock %}
+
+{% block content %}
+<section class="bg-neutral-50 py-14">
+  <div class="mx-auto grid max-w-6xl gap-6 px-4 lg:grid-cols-3">
+    <a href="tel:{{ SITE_PHONE_TEL }}" class="rounded-[28px] bg-white p-6 shadow-card">
+      <p class="text-xs font-bold text-gold">تلفن</p>
+      <p class="mt-2 text-2xl font-extrabold">{{ SITE_PHONE }}</p>
+    </a>
+    <a href="mailto:{{ SITE_EMAIL }}" class="rounded-[28px] bg-white p-6 shadow-card">
+      <p class="text-xs font-bold text-gold">ایمیل</p>
+      <p class="mt-2 text-xl font-extrabold">{{ SITE_EMAIL }}</p>
+    </a>
+    <div class="rounded-[28px] bg-white p-6 shadow-card">
+      <p class="text-xs font-bold text-gold">دفتر</p>
+      <p class="mt-2 text-sm font-bold leading-7">{{ SITE_ADDRESS }}</p>
+    </div>
+  </div>
+
+  <div class="mx-auto mt-8 grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_320px]">
+    <form method="post" novalidate class="rounded-[28px] bg-white p-6 shadow-card md:p-8">
+      {% csrf_token %}
+      <h2 class="mb-6 text-2xl font-extrabold">پیام بگذارید</h2>
+      <div class="grid gap-5">
+        {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-extrabold">
+            {{ field.label }}
+            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}<p class="mt-2 text-sm text-red-600">{{ field.errors.0 }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="mt-6 rounded-xl bg-sabz px-8 py-3 text-sm font-extrabold text-white transition hover:bg-sabz-dark">ارسال پیام</button>
+    </form>
+    <aside class="rounded-[28px] bg-sabz p-6 text-white">
+      <h2 class="text-xl font-extrabold">کار مشخصی دارید؟</h2>
+      <p class="mt-3 text-sm leading-7 text-white/85">اگر نوع خدمت، متراژ و آدرس را می‌دانید، فرم درخواست کامل‌تر است و بازدید را دقیق‌تر هماهنگ می‌کنیم.</p>
+      <a href="{% url 'request' %}" class="mt-6 inline-block rounded-xl bg-gold px-5 py-3 text-sm font-extrabold text-neutral-900">ثبت درخواست خدمات</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

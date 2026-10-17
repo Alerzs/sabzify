@@ -1,0 +1,33 @@
+{% extends "website/base.html" %}
+
+{% block title %}پیگیری درخواست{% endblock %}
+{% block crumb %}پیگیری{% endblock %}
+{% block page_title %}پیگیری درخواست{% endblock %}
+{% block page_subtitle %}کد پیگیری را که بعد از ثبت درخواست دیدید وارد کنید.{% endblock %}
+
+{% block content %}
+<section class="bg-neutral-50 py-16">
+  <div class="mx-auto max-w-xl px-4">
+    <form method="get" class="rounded-[28px] bg-white p-6 shadow-card md:p-8">
+      <label for="code" class="mb-2 block text-sm font-extrabold">کد پیگیری</label>
+      <input id="code" name="code" value="{{ code }}" placeholder="مثلاً SZ1A2B3C" class="w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm uppercase outline-none focus:border-sabz focus:bg-white focus:ring-4 focus:ring-sabz/10">
+      <button type="submit" class="mt-4 rounded-xl bg-gold px-6 py-3 text-sm font-extrabold">نمایش وضعیت</button>
+    </form>
+
+    {% if searched and item %}
+    <div class="mt-6 rounded-[28px] bg-white p-6 shadow-card">
+      <p class="text-sm text-neutral-500">وضعیت فعلی</p>
+      <p class="mt-1 text-2xl font-extrabold text-sabz">{{ item.get_status_display }}</p>
+      <dl class="mt-6 space-y-3 text-sm">
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">نام</dt><dd class="font-bold">{{ item.full_name }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">خدمت</dt><dd class="font-bold">{{ item.get_service_display }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">شهر</dt><dd class="font-bold">{{ item.city|default:"—" }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تاریخ ثبت</dt><dd class="font-bold">{{ item.created_at|date:"Y/m/d" }}</dd></div>
+      </dl>
+    </div>
+    {% elif searched %}
+    <p class="mt-6 rounded-2xl bg-white p-5 text-sm font-bold text-red-600 shadow-card">درخواستی با این کد پیدا نشد. کد را دوباره بررسی کنید.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
