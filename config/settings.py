@@ -1,12 +1,13 @@
 import os
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / '.env', override=True)
+load_dotenv(BASE_DIR / '.env', override=False)
 
 
 def env_bool(name, default=False):
@@ -18,7 +19,6 @@ def env_bool(name, default=False):
 
 def env_csv(name, default=''):
     return [item.strip() for item in os.environ.get(name, default).split(',') if item.strip()]
-
 
 
 SECRET_KEY = (
@@ -33,9 +33,12 @@ if not SECRET_KEY:
         'SECRET_KEY is missing. Set it in .env for local work, or in the PaaS environment for production.'
     )
 
-ALLOWED_HOSTS = env_csv('ALLOWED_HOSTS', '127.0.0.1,localhost')
+ALLOWED_HOSTS = env_csv('ALLOWED_HOSTS', '127.0.0.1,localhost,.liara.run,.liara.ir')
 CSRF_TRUSTED_ORIGINS = [
-    origin for origin in env_csv('CSRF_TRUSTED_ORIGINS')
+    origin for origin in env_csv(
+        'CSRF_TRUSTED_ORIGINS',
+        'https://*.liara.run,https://*.liara.ir',
+    )
     if origin.startswith(('http://', 'https://'))
 ]
 
@@ -81,33 +84,60 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+def postgres_from_url(url):
+    parsed = urlparse(url)
+    scheme = parsed.scheme.split('+')[0]
+    if scheme not in {'postgres', 'postgresql'}:
+        raise ImproperlyConfigured('DATABASE_URL must be a PostgreSQL URL.')
+    config = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': unquote(parsed.path.lstrip('/')),
+        'USER': unquote(parsed.username or ''),
+        'PASSWORD': unquote(parsed.password or ''),
+        'HOST': parsed.hostname or '',
+        'PORT': str(parsed.port or 5432),
+        'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
     }
-}
+    sslmode = parse_qs(parsed.query).get('sslmode', [''])[0]
+    if sslmode:
+        config['OPTIONS'] = {'sslmode': sslmode}
+    return config
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-
-]
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+def sqlite_path():
+    configured = os.environ.get('SQLITE_PATH', '').strip()
+    if configured:
+        return Path(configured)
+    return BASE_DIR / 'DB' / 'db.sqlite3'
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+database_url = os.environ.get('DATABASE_URL', '').strip()
+postgres_host = os.environ.get('POSTGRESQL_DB_HOST', '').strip()
+
+if database_url:
+    DATABASES = {'default': postgres_from_url(database_url)}
+elif postgres_host:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRESQL_DB_NAME', 'postgres'),
+            'USER': os.environ.get('POSTGRESQL_DB_USER', ''),
+            'PASSWORD': os.environ.get('POSTGRESQL_DB_PASS', ''),
+            'HOST': postgres_host,
+            'PORT': os.environ.get('POSTGRESQL_DB_PORT', '5432'),
+            'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '60')),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': sqlite_path(),
+        }
+    }
+
+
+AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'fa-ir'
 
@@ -117,14 +147,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'same-origin'
