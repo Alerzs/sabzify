@@ -11,10 +11,12 @@
   <div class="mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-3">
     {% for post in posts %}
     <a href="{% url 'blog_detail' post.slug %}" class="group block">
-      <img src="{% static post.image %}" alt="{{ post.title }}" class="h-56 w-full rounded-2xl object-cover">
-      <div class="-mt-8 rounded-xl bg-gold px-4 py-5 text-center shadow-card transition group-hover:-translate-y-1">
-        <h2 class="text-lg font-extrabold">{{ post.title }}</h2>
-        <span class="mt-3 inline-block rounded-md bg-sabz px-3 py-1 text-xs font-bold text-white">{{ post.date }}</span>
+      <div class="overflow-hidden rounded-2xl bg-gold text-center shadow-card transition duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-card-hover">
+        <img src="{% static post.image %}" alt="{{ post.title }}" class="h-56 w-full bg-neutral-200 object-cover transition duration-500 ease-out group-hover:scale-105">
+        <div class="px-4 py-5">
+          <h2 class="text-lg font-extrabold leading-8">{{ post.title }}</h2>
+          <span class="mt-3 inline-block rounded-md bg-sabz px-3 py-1 text-xs font-bold text-white">{{ post.date }}</span>
+        </div>
       </div>
       <p class="mt-6 text-sm leading-7 text-neutral-600">{{ post.excerpt }}</p>
     </a>

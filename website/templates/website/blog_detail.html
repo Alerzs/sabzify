@@ -9,13 +9,15 @@
 {% block content %}
 <article class="bg-white py-14">
   <div class="mx-auto max-w-3xl px-4">
-    <img src="{% static post.image %}" alt="{{ post.title }}" class="mb-8 h-80 w-full rounded-[28px] object-cover">
+    <div class="mb-8 overflow-hidden rounded-[28px]">
+      <img src="{% static post.image %}" alt="{{ post.title }}" class="h-80 w-full object-cover transition duration-500 ease-out hover:scale-[1.03]">
+    </div>
     <div class="space-y-5 text-base leading-9 text-neutral-700">
       {% for paragraph in post.paragraphs %}
       <p>{{ paragraph }}</p>
       {% endfor %}
     </div>
-    <a href="{% url 'request' %}" class="mt-8 inline-block rounded-xl bg-gold px-6 py-3 text-sm font-extrabold">برای همین موضوع درخواست بدهید</a>
+    <a href="{% url 'request' %}" class="mt-8 inline-block rounded-xl bg-gold px-6 py-3 text-sm font-extrabold transition hover:bg-gold-soft">برای همین موضوع درخواست بدهید</a>
   </div>
 </article>
 {% if others %}
@@ -24,7 +26,7 @@
     <h2 class="mb-6 text-2xl font-extrabold">نوشته‌های دیگر</h2>
     <div class="grid gap-4 md:grid-cols-2">
       {% for item in others %}
-      <a href="{% url 'blog_detail' item.slug %}" class="rounded-2xl bg-white p-5 font-extrabold shadow-card hover:text-sabz">{{ item.title }}</a>
+      <a href="{% url 'blog_detail' item.slug %}" class="rounded-2xl bg-white p-5 font-extrabold shadow-card transition duration-300 ease-out hover:-translate-y-1 hover:text-sabz hover:shadow-card-hover">{{ item.title }}</a>
       {% endfor %}
     </div>
   </div>

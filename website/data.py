@@ -52,14 +52,14 @@ SERVICES = [
 FEATURED = [
     {
         'title': 'باغبان‌های حرفه‌ای و با تجربه',
-        'image': 'img/card-team.jpg',
+        'image': 'img/card-team.png',
     },
     {
         'title': 'طراحی و اجرای فضای سبز',
-        'image': 'img/card-design.jpg',
+        'image': 'img/card-design.png',
     },
     {
-        'title': 'نگهداری با مراقبت',
+        'title': 'فروش انواع کود های خانگی',
         'image': 'img/card-care.jpg',
     },
 ]

@@ -43,7 +43,7 @@
         <h2 class="text-3xl font-extrabold md:text-4xl">رایگان تماس بگیرید</h2>
       </div>
       <p class="text-sm font-bold text-gold md:text-base">بازدید و مشاوره را در سه مرحله ساده دریافت کنید</p>
-      <a href="tel:{{ SITE_PHONE_TEL }}" class="text-3xl font-extrabold tracking-wide md:text-5xl">{{ SITE_PHONE }}</a>
+      <a href="tel:{{ SITE_PHONE_TEL }}" class="text-3xl font-extrabold tracking-wide transition hover:text-gold md:text-5xl">{{ SITE_PHONE }}</a>
     </div>
   </section>
 
@@ -53,7 +53,7 @@
       <h2 class="mb-10 text-3xl font-extrabold">همکاران و مشتریان ما</h2>
       <div class="grid grid-cols-2 gap-4 md:grid-cols-5">
         {% for name in partners %}
-        <div class="grid h-24 place-items-center rounded-2xl border border-neutral-100 bg-neutral-50 px-3 text-sm font-extrabold text-neutral-400">{{ name }}</div>
+        <div class="grid h-24 place-items-center rounded-2xl border border-neutral-100 bg-neutral-50 px-3 text-sm font-extrabold text-neutral-400 transition duration-300 ease-out hover:-translate-y-1 hover:border-gold hover:text-sabz">{{ name }}</div>
         {% endfor %}
       </div>
     </div>

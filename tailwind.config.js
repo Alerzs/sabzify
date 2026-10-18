@@ -22,6 +22,7 @@ module.exports = {
       },
       boxShadow: {
         card: '0 16px 40px rgba(16, 40, 32, 0.08)',
+        'card-hover': '0 22px 48px rgba(16, 40, 32, 0.16)',
         nav: '0 10px 40px rgba(0, 0, 0, 0.08)',
       },
     },
