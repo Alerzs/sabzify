@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import jdatetime
-from django.conf import settings
 from django.core.files import File
 from django.db import migrations
 
@@ -47,7 +46,8 @@ POSTS = [
 
 def seed_blog_posts(apps, schema_editor):
     BlogPost = apps.get_model('website', 'BlogPost')
-    static_dir = Path(settings.BASE_DIR) / 'static' / 'img'
+    # Bundled with the app so a fresh migrate on the server can find them.
+    seed_dir = Path(__file__).resolve().parent.parent / 'seed_images'
     for item in POSTS:
         if BlogPost.objects.filter(slug=item['slug']).exists():
             continue
@@ -59,7 +59,11 @@ def seed_blog_posts(apps, schema_editor):
             published_on=jdatetime.date(*item['jalali']).togregorian(),
             is_published=True,
         )
-        image_path = static_dir / item['image']
+        image_path = seed_dir / item['image']
+        if not image_path.is_file():
+            raise FileNotFoundError(
+                f'Seed image is missing from the deploy: {image_path}'
+            )
         with image_path.open('rb') as handle:
             post.image.save(item['image'], File(handle), save=False)
         post.save()
