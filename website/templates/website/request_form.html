@@ -1,6 +1,14 @@
 {% extends "website/base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/jalali-datepicker.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/jalali-datepicker.js' %}?v=2"></script>
+{% endblock %}
+
 {% block title %}ثبت درخواست{% endblock %}
 {% block crumb %}ثبت درخواست{% endblock %}
 {% block page_title %}درخواست خدمات باغبانی{% endblock %}

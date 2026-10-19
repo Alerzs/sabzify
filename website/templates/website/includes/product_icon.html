@@ -1,0 +1,13 @@
+<svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+  {% if kind == "liquid" %}
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6M10 3v4L6.5 14A5 5 0 0 0 11 21h2a5 5 0 0 0 4.5-7L14 7V3"/>
+  <path stroke-linecap="round" d="M8.2 14h7.6"/>
+  {% elif kind == "powder" %}
+  <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10l-1 12H8L7 8z"/>
+  <path stroke-linecap="round" d="M9 8V6a3 3 0 0 1 6 0v2"/>
+  <path stroke-linecap="round" d="M10 13h4"/>
+  {% else %}
+  <path stroke-linecap="round" stroke-linejoin="round" d="M5 19c8-1 13-8 14-15-7 1-14 5-14 15z"/>
+  <path stroke-linecap="round" d="M8.5 15.5c2.2-2.4 4.8-4.2 8-5.2"/>
+  {% endif %}
+</svg>

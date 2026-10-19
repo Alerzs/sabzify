@@ -1,0 +1,52 @@
+{% extends "website/base.html" %}
+{% load jalali_tags %}
+
+{% block title %}درخواست خرید ثبت شد{% endblock %}
+{% block crumb %}<a href="{% url 'shop' %}" class="hover:text-gold">فروشگاه</a>{% endblock %}
+{% block page_title %}درخواست خرید ثبت شد{% endblock %}
+{% block page_subtitle %}کارشناس سبزیفای به‌زودی تماس می‌گیرد. پس از هماهنگی، کود به آدرس شما ارسال می‌شود.{% endblock %}
+
+{% block content %}
+<section class="bg-neutral-50 py-16">
+  <div class="mx-auto max-w-xl px-4">
+    <div class="rounded-[28px] bg-white p-8 text-center shadow-card">
+      <div class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-gold text-sabz">
+        <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <p class="text-sm text-neutral-500">کد پیگیری سفارش</p>
+      <p class="mt-1 text-3xl font-extrabold tracking-widest text-sabz">{{ order.tracking_code }}</p>
+      <p class="mt-4 text-sm leading-7 text-neutral-600">{{ order.status_hint }}</p>
+      <dl class="mt-8 space-y-3 text-sm text-right">
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">محصول</dt>
+          <dd class="font-bold">{{ order.product_title }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">تعداد</dt>
+          <dd class="font-bold">{{ order.quantity }} × {{ order.unit_label }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">مبلغ</dt>
+          <dd class="font-bold">{{ order.total_display }} تومان</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">تحویل</dt>
+          <dd class="font-bold">{{ order.city }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">وضعیت</dt>
+          <dd class="font-bold text-sabz">{{ order.get_status_display }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <dt class="text-neutral-500">تاریخ ثبت</dt>
+          <dd class="font-bold">{{ order.created_at|jalali:"time" }}</dd>
+        </div>
+      </dl>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="{% url 'track' %}?code={{ order.tracking_code }}" class="rounded-xl bg-sabz px-5 py-3 text-sm font-extrabold text-white">پیگیری سفارش</a>
+        <a href="{% url 'shop' %}" class="rounded-xl bg-neutral-100 px-5 py-3 text-sm font-extrabold">بازگشت به فروشگاه</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

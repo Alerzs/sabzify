@@ -1,0 +1,91 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.title }}{% endblock %}
+{% block crumb %}<a href="{% url 'shop' %}" class="hover:text-gold">فروشگاه</a><span class="px-1">/</span>{{ product.title }}{% endblock %}
+{% block page_title %}{{ product.title }}{% endblock %}
+{% block page_subtitle %}{{ product.summary }}{% endblock %}
+
+{% block content %}
+<section class="bg-neutral-50 py-14">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_420px]">
+    <div class="space-y-6">
+      <img src="{% static 'img/kood.webp' %}" alt="{{ product.title }}" class="h-72 w-full rounded-[28px] object-cover shadow-card md:h-96">
+      <div class="rounded-[28px] bg-white p-6 shadow-card md:p-8">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="rounded-full bg-gold-soft px-3 py-1 text-xs font-extrabold text-sabz">{{ product.get_kind_display }}</span>
+          <span class="text-sm font-bold text-neutral-500">{{ product.unit }}</span>
+        </div>
+        <p class="mt-4 text-3xl font-extrabold text-sabz">{{ product.price_display }} <span class="text-base font-bold text-neutral-500">تومان</span></p>
+        <p class="mt-2 text-sm text-neutral-500">مناسب برای {{ product.suitable_for }}</p>
+        <div class="mt-6 space-y-4 text-sm leading-8 text-neutral-700">
+          {% for paragraph in product.paragraphs %}
+          <p>{{ paragraph }}</p>
+          {% endfor %}
+        </div>
+        <div class="mt-6 rounded-2xl bg-neutral-50 p-5">
+          <h2 class="font-extrabold">طرز مصرف</h2>
+          <p class="mt-2 text-sm leading-8 text-neutral-600">{{ product.usage }}</p>
+        </div>
+      </div>
+    </div>
+
+    <form method="post" novalidate class="h-fit rounded-[28px] bg-white p-6 shadow-card md:p-8">
+      {% csrf_token %}
+      <h2 class="text-xl font-extrabold">درخواست خرید</h2>
+      <p class="mt-2 text-sm leading-7 text-neutral-600">فرم را بفرستید. کارشناس تماس می‌گیرد و بعد از هماهنگی، کود ارسال می‌شود.</p>
+      {% if form.non_field_errors %}
+      <p class="mt-4 text-sm text-red-600">{{ form.non_field_errors.0 }}</p>
+      {% endif %}
+      <div class="mt-5 grid gap-5">
+        {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-extrabold">
+            {{ field.label }}
+            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+          <p class="mt-2 text-sm text-red-600">{{ field.errors.0 }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <p class="mt-5 text-sm text-neutral-600">
+        مبلغ این درخواست:
+        <span id="order-total" class="font-extrabold text-sabz" data-unit="{{ product.price }}">{{ product.price_display }}</span>
+        تومان
+      </p>
+      <button type="submit" class="mt-5 w-full rounded-xl bg-gold py-3.5 text-sm font-extrabold text-neutral-900 transition hover:bg-gold-soft">ثبت درخواست خرید</button>
+      <ol class="mt-6 space-y-2 text-sm leading-7 text-neutral-600">
+        <li>۱. کد پیگیری را می‌گیرید.</li>
+        <li>۲. کارشناس برای تأیید سفارش تماس می‌گیرد.</li>
+        <li>۳. کود به آدرسی که نوشتید ارسال می‌شود.</li>
+      </ol>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  var input = document.getElementById('id_quantity');
+  var total = document.getElementById('order-total');
+  if (!input || !total) return;
+  var unit = Number(total.getAttribute('data-unit')) || 0;
+  var digits = '۰۱۲۳۴۵۶۷۸۹';
+  function format(amount) {
+    var grouped = String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
+    return grouped.replace(/\d/g, function (digit) { return digits[digit]; });
+  }
+  function refresh() {
+    var qty = Number(input.value);
+    if (!qty || qty < 1) qty = 1;
+    total.textContent = format(unit * qty);
+  }
+  input.addEventListener('input', refresh);
+  refresh();
+})();
+</script>
+{% endblock %}

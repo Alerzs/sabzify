@@ -2,6 +2,7 @@
 <a href="{% url 'home' %}" class="block rounded-xl px-4 py-2 text-sm font-bold {% if name == 'home' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">خانه</a>
 <a href="{% url 'about' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'about' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">درباره ما</a>
 <a href="{% url 'services' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'services' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">خدمات ما</a>
+<a href="{% url 'shop' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'shop' or name == 'shop_detail' or name == 'shop_success' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">فروشگاه</a>
 <a href="{% url 'blog' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'blog' or name == 'blog_detail' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">وبلاگ</a>
 <a href="{% url 'track' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'track' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">پیگیری</a>
 <a href="{% url 'contact' %}" class="block rounded-xl px-4 py-2 text-sm font-medium {% if name == 'contact' %}bg-sabz text-white{% else %}hover:bg-neutral-50{% endif %}">تماس با ما</a>

@@ -1,9 +1,10 @@
 {% extends "website/base.html" %}
+{% load jalali_tags %}
 
 {% block title %}پیگیری درخواست{% endblock %}
 {% block crumb %}پیگیری{% endblock %}
 {% block page_title %}پیگیری درخواست{% endblock %}
-{% block page_subtitle %}کد پیگیری را که بعد از ثبت درخواست دیدید وارد کنید.{% endblock %}
+{% block page_subtitle %}کد پیگیری خدمات یا سفارش فروشگاه را وارد کنید.{% endblock %}
 
 {% block content %}
 <section class="bg-neutral-50 py-16">
@@ -14,7 +15,7 @@
       <button type="submit" class="mt-4 rounded-xl bg-gold px-6 py-3 text-sm font-extrabold">نمایش وضعیت</button>
     </form>
 
-    {% if searched and item %}
+    {% if searched and kind == 'service' %}
     <div class="mt-6 rounded-[28px] bg-white p-6 shadow-card">
       <p class="text-sm text-neutral-500">وضعیت فعلی</p>
       <p class="mt-1 text-2xl font-extrabold text-sabz">{{ item.get_status_display }}</p>
@@ -22,7 +23,24 @@
         <div class="flex justify-between gap-4"><dt class="text-neutral-500">نام</dt><dd class="font-bold">{{ item.full_name }}</dd></div>
         <div class="flex justify-between gap-4"><dt class="text-neutral-500">خدمت</dt><dd class="font-bold">{{ item.get_service_display }}</dd></div>
         <div class="flex justify-between gap-4"><dt class="text-neutral-500">شهر</dt><dd class="font-bold">{{ item.city|default:"—" }}</dd></div>
-        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تاریخ ثبت</dt><dd class="font-bold">{{ item.created_at|date:"Y/m/d" }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تاریخ ثبت</dt><dd class="font-bold">{{ item.created_at|jalali }}</dd></div>
+        {% if item.preferred_date %}
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تاریخ ترجیحی</dt><dd class="font-bold">{{ item.preferred_date|jalali }}</dd></div>
+        {% endif %}
+      </dl>
+    </div>
+    {% elif searched and kind == 'shop' %}
+    <div class="mt-6 rounded-[28px] bg-white p-6 shadow-card">
+      <p class="text-sm text-neutral-500">وضعیت سفارش کود</p>
+      <p class="mt-1 text-2xl font-extrabold text-sabz">{{ item.get_status_display }}</p>
+      <p class="mt-3 text-sm leading-7 text-neutral-600">{{ item.status_hint }}</p>
+      <dl class="mt-6 space-y-3 text-sm">
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">نام</dt><dd class="font-bold">{{ item.full_name }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">محصول</dt><dd class="font-bold">{{ item.product_title }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تعداد</dt><dd class="font-bold">{{ item.quantity }} {{ item.unit_label }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">مبلغ</dt><dd class="font-bold">{{ item.total_display }} تومان</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">شهر</dt><dd class="font-bold">{{ item.city }}</dd></div>
+        <div class="flex justify-between gap-4"><dt class="text-neutral-500">تاریخ ثبت</dt><dd class="font-bold">{{ item.created_at|jalali }}</dd></div>
       </dl>
     </div>
     {% elif searched %}

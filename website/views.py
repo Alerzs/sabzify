@@ -1,9 +1,8 @@
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .data import FEATURED, POSTS, SERVICES, STATS, STEPS, TESTIMONIALS
-from .forms import ContactForm, ServiceRequestForm
-from .models import ServiceRequest
+from .data import FEATURED, SERVICES, STATS, STEPS
+from .forms import ContactForm, ServiceRequestForm, ShopOrderForm
+from .models import BlogPost, Product, ServiceRequest, ShopOrder
 
 
 def home(request):
@@ -11,9 +10,9 @@ def home(request):
         'services': SERVICES[:6],
         'featured': FEATURED,
         'stats': STATS,
-        'testimonials': TESTIMONIALS,
-        'posts': POSTS,
+        'posts': BlogPost.objects.filter(is_published=True)[:3],
         'steps': STEPS,
+        'shop_products': Product.objects.filter(is_available=True)[:3],
     })
 
 
@@ -26,14 +25,13 @@ def services(request):
 
 
 def blog(request):
-    return render(request, 'website/blog.html', {'posts': POSTS})
+    posts = BlogPost.objects.filter(is_published=True)
+    return render(request, 'website/blog.html', {'posts': posts})
 
 
 def blog_detail(request, slug):
-    post = next((item for item in POSTS if item['slug'] == slug), None)
-    if post is None:
-        raise Http404
-    others = [item for item in POSTS if item['slug'] != slug]
+    post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+    others = BlogPost.objects.filter(is_published=True).exclude(pk=post.pk)
     return render(request, 'website/blog_detail.html', {'post': post, 'others': others})
 
 
@@ -59,13 +57,43 @@ def request_success(request, code):
 def track(request):
     code = request.GET.get('code', '').strip().upper()
     item = None
+    kind = None
     if code:
         item = ServiceRequest.objects.filter(tracking_code=code).first()
+        if item:
+            kind = 'service'
+        else:
+            item = ShopOrder.objects.filter(tracking_code=code).select_related('product').first()
+            if item:
+                kind = 'shop'
     return render(request, 'website/track.html', {
         'code': code,
         'item': item,
+        'kind': kind,
         'searched': bool(code),
     })
+
+
+def shop(request):
+    products = Product.objects.filter(is_available=True)
+    return render(request, 'website/shop.html', {'products': products})
+
+
+def shop_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, is_available=True)
+    form = ShopOrderForm(request.POST or None, product=product)
+    if request.method == 'POST' and form.is_valid():
+        order = form.save()
+        return redirect('shop_success', code=order.tracking_code)
+    return render(request, 'website/shop_detail.html', {
+        'product': product,
+        'form': form,
+    })
+
+
+def shop_success(request, code):
+    order = get_object_or_404(ShopOrder, tracking_code=code)
+    return render(request, 'website/shop_success.html', {'order': order})
 
 
 def contact(request):

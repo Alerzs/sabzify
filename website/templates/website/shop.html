@@ -1,0 +1,54 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}فروشگاه کود خانگی{% endblock %}
+{% block crumb %}فروشگاه{% endblock %}
+{% block page_title %}کودهای خانگی، آماده ارسال{% endblock %}
+{% block page_subtitle %}محصول را انتخاب کنید و درخواست خرید بدهید. کارشناس سبزیفای تماس می‌گیرد و پس از هماهنگی، کود به آدرس شما ارسال می‌شود.{% endblock %}
+
+{% block content %}
+<section class="bg-white py-14">
+  <div class="mx-auto max-w-6xl px-4">
+    <ol class="grid gap-4 md:grid-cols-3">
+      <li class="rounded-2xl bg-neutral-50 px-5 py-5">
+        <p class="text-sm font-extrabold text-sabz">۰۱</p>
+        <h2 class="mt-2 font-extrabold">انتخاب کود</h2>
+        <p class="mt-2 text-sm leading-7 text-neutral-600">نوع و تعداد را مشخص کنید. پرداخت آنلاین نیست.</p>
+      </li>
+      <li class="rounded-2xl bg-neutral-50 px-5 py-5">
+        <p class="text-sm font-extrabold text-sabz">۰۲</p>
+        <h2 class="mt-2 font-extrabold">تماس کارشناس</h2>
+        <p class="mt-2 text-sm leading-7 text-neutral-600">برای تأیید آدرس، تعداد و نحوه مصرف با شما تماس می‌گیریم.</p>
+      </li>
+      <li class="rounded-2xl bg-neutral-50 px-5 py-5">
+        <p class="text-sm font-extrabold text-sabz">۰۳</p>
+        <h2 class="mt-2 font-extrabold">ارسال محصول</h2>
+        <p class="mt-2 text-sm leading-7 text-neutral-600">بعد از هماهنگی، کود بسته‌بندی و به آدرس شما فرستاده می‌شود.</p>
+      </li>
+    </ol>
+
+    {% if products %}
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {% for product in products %}
+      {% include "website/includes/product_card.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="mt-10 rounded-2xl bg-neutral-50 p-6 text-sm font-bold text-neutral-600">فعلاً کودی برای سفارش موجود نیست.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="bg-neutral-50 py-14">
+  <div class="mx-auto grid max-w-6xl items-center gap-8 px-4 lg:grid-cols-2">
+    <img src="{% static 'img/kood.webp' %}" alt="بسته‌های کود خانگی سبزیفای" class="h-80 w-full rounded-[28px] object-cover shadow-card">
+    <div>
+      <h2 class="text-3xl font-extrabold">کود خانگی، بدون دردسر ساختن</h2>
+      <p class="mt-4 text-sm leading-8 text-neutral-600">
+        ورمی‌کمپوست، کمپوست برگ و کودهای مایع را آماده بسته‌بندی می‌کنیم. لازم نیست خودتان مواد را بپزید یا نسبت‌ها را حدس بزنید. اگر گیاه‌تان خاص است، در توضیحات بنویسید تا کارشناس موقع تماس مقدار مصرف را بگوید.
+      </p>
+      <a href="tel:{{ SITE_PHONE_TEL }}" class="mt-6 inline-flex rounded-xl bg-gold px-5 py-3 text-sm font-extrabold text-neutral-900">مشاوره تلفنی {{ SITE_PHONE }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

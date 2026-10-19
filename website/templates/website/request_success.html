@@ -1,4 +1,5 @@
 {% extends "website/base.html" %}
+{% load jalali_tags %}
 
 {% block title %}درخواست ثبت شد{% endblock %}
 {% block crumb %}ثبت درخواست{% endblock %}
@@ -27,9 +28,15 @@
           <dt class="text-neutral-500">وضعیت</dt>
           <dd class="font-bold text-sabz">{{ item.get_status_display }}</dd>
         </div>
+        {% if item.preferred_date %}
+        <div class="flex items-center justify-between gap-4 border-b border-neutral-100 pb-3">
+          <dt class="text-neutral-500">تاریخ ترجیحی</dt>
+          <dd class="font-bold">{{ item.preferred_date|jalali }}</dd>
+        </div>
+        {% endif %}
         <div class="flex items-center justify-between gap-4">
           <dt class="text-neutral-500">تاریخ ثبت</dt>
-          <dd class="font-bold">{{ item.created_at|date:"Y/m/d H:i" }}</dd>
+          <dd class="font-bold">{{ item.created_at|jalali:"time" }}</dd>
         </div>
       </dl>
       <div class="mt-8 flex flex-wrap justify-center gap-3">

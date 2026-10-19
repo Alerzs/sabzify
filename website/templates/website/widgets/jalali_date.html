@@ -1,0 +1,10 @@
+<div class="jalali-picker" data-jalali-picker>
+  <input type="{{ widget.type }}" name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+  <button type="button" class="jalali-picker__toggle" aria-label="باز کردن تقویم" aria-haspopup="dialog" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3.5" y="5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M8 3.5v3M16 3.5v3M3.5 9.5h17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <div class="jalali-picker__panel" id="{{ widget.attrs.id }}-panel" role="dialog" aria-label="تقویم جلالی" hidden></div>
+</div>
