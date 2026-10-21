@@ -61,7 +61,7 @@ FEATURED = [
         'url_name': 'services',
     },
     {
-        'title': 'فروش انواع کود های خانگی',
+        'title': 'فروش کودهای کشاورزی',
         'image': 'img/kood.webp',
         'url_name': 'shop',
         'caption': 'مشاهده فروشگاه و ثبت سفارش',
