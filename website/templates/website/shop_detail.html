@@ -10,7 +10,11 @@
 <section class="bg-neutral-50 py-14">
   <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1fr_420px]">
     <div class="space-y-6">
+      {% if product.image %}
+      <img src="{% static product.image %}" alt="{{ product.title }}" class="mx-auto w-full max-w-xs rounded-2xl bg-white object-contain shadow-card">
+      {% else %}
       <img src="{% static 'img/kood.webp' %}" alt="{{ product.title }}" class="h-72 w-full rounded-[28px] object-cover shadow-card md:h-96">
+      {% endif %}
       <div class="rounded-[28px] bg-white p-6 shadow-card md:p-8">
         <div class="flex flex-wrap items-center gap-3">
           <span class="rounded-full bg-gold-soft px-3 py-1 text-xs font-extrabold text-sabz">{{ product.get_kind_display }}</span>

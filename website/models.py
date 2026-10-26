@@ -121,6 +121,12 @@ class Product(models.Model):
     unit = models.CharField('واحد فروش', max_length=80)
     suitable_for = models.CharField('مناسب برای', max_length=160)
     kind = models.CharField('نوع', max_length=16, choices=KIND_CHOICES, default='solid')
+    image = models.CharField(
+        'آدرس تصویر',
+        max_length=200,
+        blank=True,
+        help_text='مسیر فایل داخل پوشه static. مثال: img/products/humic-acid.png',
+    )
     is_available = models.BooleanField('قابل سفارش', default=True)
     sort_order = models.PositiveSmallIntegerField('ترتیب نمایش', default=0)
 
